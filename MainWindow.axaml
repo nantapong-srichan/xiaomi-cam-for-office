@@ -1,0 +1,25 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="OfficeCamera.MainWindow"
+        Title="Office Camera" Width="900" Height="600">
+  <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="24">
+    <StackPanel Grid.Row="0">
+      <TextBlock Text="Office Camera" FontSize="28" FontWeight="Bold" />
+      <TextBlock Text="Xiaomi C400 · C# + Avalonia" Opacity="0.65" />
+    </StackPanel>
+    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Margin="0,20,0,12">
+      <TextBox Name="StreamUrl" Watermark="go2rtc WebRTC/HLS URL เช่น http://server:1984/api/stream.m3u8" />
+      <Button Grid.Column="1" Content="เชื่อมต่อสตรีม" Click="ConnectStream" Margin="12,0,0,0" />
+    </Grid>
+    <Border Grid.Row="2" Background="#17191D" CornerRadius="8">
+      <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
+        <TextBlock Text="Live view" FontSize="22" HorizontalAlignment="Center" />
+        <TextBlock Name="StreamStatus" Text="ยังไม่ได้เชื่อมต่อ — จะฝัง WebRTC/HLS ในขั้นถัดไป" Opacity="0.65" />
+      </StackPanel>
+    </Border>
+    <StackPanel Grid.Row="3" Orientation="Horizontal" Spacing="12" Margin="0,14,0,0">
+      <Button Content="สแกนเครือข่าย" Click="ScanNetwork" />
+      <TextBlock Name="Status" Text="พร้อมใช้งาน" VerticalAlignment="Center" Opacity="0.7" />
+    </StackPanel>
+  </Grid>
+</Window>

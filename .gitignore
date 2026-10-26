@@ -1,0 +1,7 @@
+bin/
+obj/
+.nuget/
+go2rtc
+go2rtc.yaml
+go2rtc.yaml.backup
+.DS_Store
