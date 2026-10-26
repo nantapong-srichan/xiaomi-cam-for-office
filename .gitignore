@@ -4,4 +4,6 @@ obj/
 go2rtc
 go2rtc.yaml
 go2rtc.yaml.backup
+*.backup
+.gitignore.save
 .DS_Store

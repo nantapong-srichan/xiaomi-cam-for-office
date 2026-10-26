@@ -1,0 +1,6 @@
+# Public example only. Do not put real Xiaomi tokens or camera details here.
+# Keep the real file as go2rtc.yaml; it is ignored by Git.
+
+streams:
+  classroom: "xiaomi://ACCOUNT:sg@CAMERA_IP?did=DEVICE_ID&model=MODEL_ID"
+  livingroom: "xiaomi://ACCOUNT:sg@CAMERA_IP?did=DEVICE_ID&model=MODEL_ID"
