@@ -2,6 +2,37 @@
 
 A cross-platform desktop application for viewing multiple Xiaomi C400 camera feeds in one simple interface.
 
+แอปเดสก์ท็อปสำหรับดูภาพจากกล้อง Xiaomi C400 หลายตัวในหน้าต่างเดียว รองรับ macOS, Windows และ Linux
+
+## ภาษาไทย
+
+โปรเจกต์นี้ใช้ C# และ Avalonia สำหรับส่วนติดต่อผู้ใช้, LibVLCSharp สำหรับเล่นวิดีโอ และ go2rtc เป็นตัวกลางสำหรับสตรีมภายในเครื่อง โดยข้อมูลการเข้าสู่ระบบ Xiaomi จะอยู่ใน go2rtc และแอปจะรับเฉพาะสตรีมวิดีโอที่ได้จาก go2rtc เท่านั้น
+
+### ความสามารถ
+
+- ดูภาพจากกล้องสองตัวพร้อมกันแบบแบ่งหน้าจอ
+- เลือกเปิดกล้องทีละตัว หรือเปิดทั้งสองตัวพร้อมกัน
+- เล่นสตรีม HLS ที่สร้างโดย go2rtc
+- รองรับ .NET 8 บน macOS, Windows และ Linux
+- แยกข้อมูลบัญชี Xiaomi และ token ออกจากซอร์สโค้ดของแอป
+
+### การติดตั้งและใช้งาน
+
+1. ดาวน์โหลด go2rtc ให้ตรงกับระบบปฏิบัติการที่ใช้งาน
+2. เปิด go2rtc จากโฟลเดอร์ที่มีไฟล์ `go2rtc.yaml` ส่วนตัว
+3. เข้า Web UI ที่ `http://127.0.0.1:1984` แล้วเพิ่มบัญชี Xiaomi และโหลดกล้อง
+4. ตั้งชื่อสตรีมสองรายการในไฟล์ config ส่วนตัว เช่น `classroom` และ `livingroom` โดยแทนค่าตัวอย่างทั้งหมดด้วยค่าที่ go2rtc สร้างให้ และห้ามเผยแพร่ไฟล์นี้
+5. รันแอปด้วยคำสั่ง:
+
+   ```sh
+   dotnet restore
+   dotnet run
+   ```
+
+### ความปลอดภัย
+
+ไฟล์ `go2rtc.yaml` ถูกตั้งใจให้ Git ไม่ติดตาม เพราะมี token สำหรับยืนยันตัวตนของ Xiaomi และรายละเอียดการเชื่อมต่อกล้อง ห้าม commit ไฟล์นี้ ไฟล์สำรอง หรือ token ลงในซอร์สโค้ด ภาพหน้าจอ log หรือ issue
+
 The application uses C# and Avalonia for the desktop UI, LibVLCSharp for video playback, and go2rtc as a local streaming gateway. Xiaomi authentication stays in go2rtc; the application only consumes the resulting camera streams.
 
 ## Features
@@ -71,6 +102,3 @@ For multiple users, run one go2rtc instance on an always-on office computer and 
 
 `go2rtc.yaml` is intentionally ignored by Git because it contains Xiaomi authentication tokens and camera connection details. Do not commit it, its backups, or copied tokens into source code, screenshots, logs, or issue reports.
 
-## License
-
-Add a project license before distributing the application publicly.

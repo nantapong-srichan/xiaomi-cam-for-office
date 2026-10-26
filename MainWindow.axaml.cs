@@ -1,24 +1,29 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using LibVLCSharp.Shared;
+using System.Diagnostics;
 
 namespace OfficeCamera;
 
 public partial class MainWindow : Window
 {
-    private readonly LibVLC _libVlc = new();
-    private readonly MediaPlayer _classroomPlayer;
-    private readonly MediaPlayer _livingroomPlayer;
+    private readonly LibVLC? _libVlc;
+    private readonly MediaPlayer? _classroomPlayer;
+    private readonly MediaPlayer? _livingroomPlayer;
     private Media? _classroomMedia;
     private Media? _livingroomMedia;
 
     public MainWindow()
     {
         InitializeComponent();
-        _classroomPlayer = new MediaPlayer(_libVlc);
-        _livingroomPlayer = new MediaPlayer(_libVlc);
-        ClassroomVideoView.MediaPlayer = _classroomPlayer;
-        LivingroomVideoView.MediaPlayer = _livingroomPlayer;
+        if (Program.VlcAvailable)
+        {
+            _libVlc = new LibVLC();
+            _classroomPlayer = new MediaPlayer(_libVlc);
+            _livingroomPlayer = new MediaPlayer(_libVlc);
+            ClassroomVideoView.MediaPlayer = _classroomPlayer;
+            LivingroomVideoView.MediaPlayer = _livingroomPlayer;
+        }
     }
 
     private static string HlsUrl(string name) =>
@@ -39,8 +44,17 @@ public partial class MainWindow : Window
         Status.Text = Play("livingroom", _livingroomPlayer, ref _livingroomMedia)
             ? "กำลังเปิดกล้องห้องนั่ง" : "เปิดกล้องห้องนั่งไม่สำเร็จ";
 
-    private bool Play(string name, MediaPlayer player, ref Media? currentMedia)
+    private bool Play(string name, MediaPlayer? player, ref Media? currentMedia)
     {
+        var url = HlsUrl(name);
+        if (!Program.VlcAvailable || player is null || _libVlc is null)
+        {
+            // The current LibVLC Mac package does not include an arm64 native build.
+            // Open go2rtc's native WebUI as a reliable playback fallback.
+            Process.Start(new ProcessStartInfo("open", "http://127.0.0.1:1984/") { UseShellExecute = false });
+            return true;
+        }
+
         try
         {
             currentMedia?.Dispose();
@@ -58,13 +72,13 @@ public partial class MainWindow : Window
 
     protected override void OnClosed(EventArgs e)
     {
-        _classroomPlayer.Stop();
-        _livingroomPlayer.Stop();
+        _classroomPlayer?.Stop();
+        _livingroomPlayer?.Stop();
         _classroomMedia?.Dispose();
         _livingroomMedia?.Dispose();
-        _classroomPlayer.Dispose();
-        _livingroomPlayer.Dispose();
-        _libVlc.Dispose();
+        _classroomPlayer?.Dispose();
+        _livingroomPlayer?.Dispose();
+        _libVlc?.Dispose();
         base.OnClosed(e);
     }
 }
